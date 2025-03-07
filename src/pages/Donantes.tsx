@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import DataTableComponent from '../components/DataTableComponent';
-import { donanteService } from '../services/donanteService';
-import { Donante } from '../types/types';
+import { fetchAPI } from '../services/api'; // Tu función para hacer peticiones HTTP
 
 const Donantes: React.FC = () => {
-  const [donantes, setDonantes] = useState<Donante[]>([]);
+  const [donantes, setDonantes] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchDonantes = async () => {
-      const data = await donanteService.getAll();
-      setDonantes(data);
+      try {
+        const data = await fetchAPI('/donantes/sql', { method: 'GET' }); // Nuevo endpoint
+        setDonantes(data);
+      } catch (error) {
+        console.error('Error al obtener donantes:', error);
+      }
     };
     fetchDonantes();
   }, []);

@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import DataTableComponent from '../components/DataTableComponent';
 import { donacionService } from '../services/donacionService';
-import { Donacion } from '../types/types';
 
 const Donaciones: React.FC = () => {
-  const [donaciones, setDonaciones] = useState<Donacion[]>([]);
+  const [donaciones, setDonaciones] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchDonaciones = async () => {
-      const data = await donacionService.getAll();
-      setDonaciones(data);
+      try {
+        const data = await donacionService.getAll();
+        setDonaciones(data);
+      } catch (error) {
+        console.error('Error al obtener donaciones:', error);
+      }
     };
     fetchDonaciones();
   }, []);
@@ -18,8 +21,8 @@ const Donaciones: React.FC = () => {
     { field: 'id', header: 'ID' },
     { field: 'descripcion', header: 'Descripción' },
     { field: 'fecha', header: 'Fecha' },
-    { field: 'donante.nombre', header: 'Donante' },
-    { field: 'beneficiario.nombre', header: 'Beneficiario' },
+    { field: 'donante_nombre', header: 'Donante' },
+    { field: 'beneficiario_nombre', header: 'Beneficiario' },
   ];
 
   return (

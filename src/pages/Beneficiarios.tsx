@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import DataTableComponent from '../components/DataTableComponent';
-import { beneficiarioService } from '../services/beneficiarioService';
-import { Beneficiario } from '../types/types';
+import { fetchAPI } from '../services/api'; // Asegúrate de tener esta función para hacer peticiones HTTP
 
 const Beneficiarios: React.FC = () => {
-  const [beneficiarios, setBeneficiarios] = useState<Beneficiario[]>([]);
+  const [beneficiarios, setBeneficiarios] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchBeneficiarios = async () => {
-      const data = await beneficiarioService.getAll();
-      setBeneficiarios(data);
+      try {
+        const data = await fetchAPI('/beneficiarios/sql', { method: 'GET' });
+        setBeneficiarios(data);
+      } catch (error) {
+        console.error('Error al obtener beneficiarios:', error);
+      }
     };
     fetchBeneficiarios();
   }, []);
